@@ -1,0 +1,57 @@
+{
+  "treeId": "campanha-comercial",
+  "treeName": "Campanha Comercial & WhatsApp",
+  "brand": {
+    "layout": "banner-and-logo",
+    "logoSize": 88,
+    "logoUrl": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=300&auto=format&fit=crop&q=80",
+    "bannerUrl": "https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=900&auto=format&fit=crop&q=80",
+    "alt": "Time Comercial",
+    "link": "",
+    "title": "Atendimento Direto | Consultoria",
+    "bio": "Selecione sua região ou fale diretamente com um consultor agora mesmo."
+  },
+  "design": {
+    "transparentBg": false,
+    "bgColor": "#064e3b",
+    "textColor": "#ecfdf5",
+    "btnBg": "#047857",
+    "btnText": "#ffffff",
+    "btnBorder": "#34d399",
+    "btnRadius": "999px",
+    "maxWidth": "480px",
+    "iconSize": "38px"
+  },
+  "links": [
+    {
+      "id": "rd-btn-whats-sp",
+      "title": "WhatsApp — Atendimento São Paulo & Sul",
+      "subtitle": "Consultores online agora",
+      "url": "https://wa.me/5511999999999",
+      "target": "_blank",
+      "iconType": "whatsapp",
+      "customImageUrl": "",
+      "highlight": true,
+      "gtmEvent": "click_whats_sp_sul",
+      "gtmCategory": "Comercial",
+      "gtmLabel": "WhatsApp SP e Sul",
+      "rdNativeSelector": "",
+      "collapsed": false
+    },
+    {
+      "id": "rd-btn-agenda",
+      "title": "Agendar Demonstração Online",
+      "subtitle": "Escolha o melhor dia e horário",
+      "url": "#rd-section-agendamento",
+      "target": "_self",
+      "iconType": "calendar",
+      "customImageUrl": "",
+      "highlight": false,
+      "gtmEvent": "click_agendar_demo",
+      "gtmCategory": "Comercial",
+      "gtmLabel": "Agendar Demonstracao",
+      "rdNativeSelector": "",
+      "collapsed": true
+    }
+  ]
+}

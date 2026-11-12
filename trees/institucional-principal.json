@@ -1,0 +1,72 @@
+{
+  "treeId": "institucional-principal",
+  "treeName": "Canais Oficiais (Institucional)",
+  "brand": {
+    "layout": "logo-circle",
+    "logoSize": 96,
+    "logoUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&auto=format&fit=crop&q=80",
+    "bannerUrl": "https://images.unsplash.com/photo-1557683316-973673baf926?w=900&auto=format&fit=crop&q=80",
+    "alt": "Logomarca Oficial",
+    "link": "",
+    "title": "Sua Marca | Canais Rápidos",
+    "bio": "Escolha abaixo como prefere falar com nosso time de especialistas ou acesse nossos conteúdos exclusivos."
+  },
+  "design": {
+    "transparentBg": false,
+    "bgColor": "#0f172a",
+    "textColor": "#f8fafc",
+    "btnBg": "#1e293b",
+    "btnText": "#ffffff",
+    "btnBorder": "#3b82f6",
+    "btnRadius": "14px",
+    "maxWidth": "480px",
+    "iconSize": "38px"
+  },
+  "links": [
+    {
+      "id": "rd-btn-whatsapp",
+      "title": "Falar com Especialista no WhatsApp",
+      "subtitle": "Atendimento comercial rápido",
+      "url": "https://wa.me/5511999999999?text=Ol%C3%A1!%20Vim%20pela%20p%C3%A1gina%20de%20links.",
+      "target": "_blank",
+      "iconType": "whatsapp",
+      "customImageUrl": "",
+      "highlight": true,
+      "gtmEvent": "click_linktree_whatsapp",
+      "gtmCategory": "Linktree RD",
+      "gtmLabel": "WhatsApp Comercial",
+      "rdNativeSelector": "",
+      "collapsed": false
+    },
+    {
+      "id": "rd-btn-ebook",
+      "title": "Baixar Apresentação & Catálogo 2026",
+      "subtitle": "PDF completo + tabela comparativa",
+      "url": "#rd-popup-catalogo",
+      "target": "_self",
+      "iconType": "download",
+      "customImageUrl": "",
+      "highlight": false,
+      "gtmEvent": "click_linktree_catalogo",
+      "gtmCategory": "Linktree RD",
+      "gtmLabel": "Download Catalogo",
+      "rdNativeSelector": "#rd-button-exemplo",
+      "collapsed": true
+    },
+    {
+      "id": "rd-btn-site",
+      "title": "Conhecer Nosso Site Oficial",
+      "subtitle": "Cases, soluções e portfólio completo",
+      "url": "https://www.rdstation.com/",
+      "target": "_blank",
+      "iconType": "globe",
+      "customImageUrl": "",
+      "highlight": false,
+      "gtmEvent": "click_linktree_site",
+      "gtmCategory": "Linktree RD",
+      "gtmLabel": "Site Oficial",
+      "rdNativeSelector": "",
+      "collapsed": true
+    }
+  ]
+}

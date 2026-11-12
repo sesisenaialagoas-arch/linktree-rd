@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RD Linktree Studio — Plataforma Multi-Linktree + Dashboard Google Sheets</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand-logo">
+      <div class="brand-badge" aria-hidden="true">RD</div>
+      <div>
+        <h1 class="balanced-heading">RD Linktree Studio</h1>
+        <span>Plataforma Multi-Linktree para RD Station + GTM + Dashboard Google Sheets</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <span id="sheets-status-badge" class="cloud-badge disconnected" title="Status da conexão com a Planilha Google">
+        ⚡ Planilha: Não configurada
+      </span>
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-export-json" title="Baixar JSON com o nome exato para a pasta /trees/ do GitHub">
+        💾 Baixar .json (/trees)
+      </button>
+      <label class="btn btn-secondary btn-sm file-upload-label" title="Importar um arquivo .json do computador">
+        📂 Importar .json
+        <input type="file" id="input-import-json" accept=".json" hidden />
+      </label>
+      <button type="button" class="btn btn-primary btn-sm" id="btn-go-code">
+        ⚡ Pegar Código RD
+      </button>
+    </div>
+  </header>
+
+  <!-- Barra de Gerenciamento de Múltiplos Linktrees (Pasta /trees + Google Sheets) -->
+  <div class="tree-switcher-bar" role="region" aria-label="Gerenciador de Árvores de Links">
+    <div class="tree-selector-group">
+      <label for="select-active-tree">🌲 Linktree Ativo:</label>
+      <select id="select-active-tree" aria-label="Selecionar árvore de links"></select>
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-new-tree" title="Criar uma nova árvore de links do zero">
+        + Novo Linktree
+      </button>
+    </div>
+
+    <div class="tree-meta-inputs">
+      <input type="text" id="input-tree-id" placeholder="id-da-arvore" title="ID único (Slug) usado no Dashboard e nome do arquivo .json" aria-label="ID da Árvore (Slug)" />
+      <input type="text" id="input-tree-name" placeholder="Nome da Árvore" title="Nome amigável desta árvore de links" aria-label="Nome da Árvore" />
+      <button type="button" class="btn btn-success btn-sm" id="btn-save-cloud" title="Salva o JSON desta árvore direto na aba Trees da sua Planilha Google">
+        ☁️ Salvar na Planilha
+      </button>
+    </div>
+  </div>
+
+  <main class="workspace">
+    <!-- Coluna Esquerda: Editor e Dashboard -->
+    <section class="editor-column" aria-label="Configurações e Dashboard">
+      <nav class="tabs-nav" role="tablist">
+        <button type="button" class="tab-btn active" data-tab="tab-brand" role="tab" aria-selected="true">
+          1. Marca &amp; Topo
+        </button>
+        <button type="button" class="tab-btn" data-tab="tab-links" role="tab" aria-selected="false">
+          2. Links &amp; GTM
+        </button>
+        <button type="button" class="tab-btn" data-tab="tab-design" role="tab" aria-selected="false">
+          3. Visual &amp; Cores
+        </button>
+        <button type="button" class="tab-btn" data-tab="tab-export" role="tab" aria-selected="false">
+          4. Código RD
+        </button>
+        <button type="button" class="tab-btn" data-tab="tab-dashboard" role="tab" aria-selected="false">
+          5. 📊 Dashboard &amp; Sheets
+        </button>
+      </nav>
+
+      <!-- ABA 1: MARCA E TOPO -->
+      <div class="tab-panel active" id="tab-brand" role="tabpanel">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2>Logomarca ou Banner</h2>
+              <p class="panel-subtitle pretty-text">Configure a imagem principal e o texto exibido abaixo da sua marca neste Linktree.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="brand-layout">Formato de Exibição no Topo</label>
+              <select id="brand-layout">
+                <option value="logo-circle">Logomarca Circular (Estilo Perfil)</option>
+                <option value="logo-rounded">Logomarca Retangular / Horizontal</option>
+                <option value="banner-full">Banner Largo no Topo (100% da largura)</option>
+                <option value="banner-and-logo">Banner de Capa + Logo Sobreposta</option>
+                <option value="none">Sem Imagem (Apenas Título e Texto)</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="group-logo-size">
+              <label for="brand-logo-size">
+                <span>Tamanho da Logo</span>
+                <span id="label-logo-size">96px</span>
+              </label>
+              <input type="range" id="brand-logo-size" min="56" max="220" value="96" />
+            </div>
+
+            <div class="form-group full" id="group-logo-url">
+              <label for="brand-logo-url">
+                <span>URL da Logomarca (ou envie arquivo)</span>
+                <span class="form-hint">PNG, SVG, JPG ou WebP</span>
+              </label>
+              <div class="upload-inline">
+                <input type="url" id="brand-logo-url" placeholder="https://seudominio.com.br/logo.png" />
+                <label class="btn btn-secondary btn-sm file-upload-label">
+                  📁 Upload
+                  <input type="file" id="upload-logo-file" accept="image/*" hidden />
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group full" id="group-banner-url" style="display: none;">
+              <label for="brand-banner-url">
+                <span>URL do Banner de Topo</span>
+                <span class="form-hint">Recomendado: 800x260px</span>
+              </label>
+              <div class="upload-inline">
+                <input type="url" id="brand-banner-url" placeholder="https://seudominio.com.br/banner-topo.jpg" />
+                <label class="btn btn-secondary btn-sm file-upload-label">
+                  📁 Upload
+                  <input type="file" id="upload-banner-file" accept="image/*" hidden />
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="brand-alt">Texto Alternativo (Alt da Marca)</label>
+              <input type="text" id="brand-alt" placeholder="Nome da sua empresa" />
+            </div>
+
+            <div class="form-group">
+              <label for="brand-link">Link ao clicar na Logo/Banner (Opcional)</label>
+              <input type="url" id="brand-link" placeholder="https://seusite.com.br" />
+            </div>
+
+            <div class="form-group full">
+              <label for="brand-title">Título / Nome Abaixo da Marca</label>
+              <input type="text" id="brand-title" placeholder="Ex: Sua Empresa | Canais Oficiais" />
+            </div>
+
+            <div class="form-group full">
+              <label for="brand-bio">Pequeno Texto / Descrição Abaixo da Marca</label>
+              <textarea id="brand-bio" rows="3" placeholder="Ex: Escolha abaixo como prefere falar com nosso time ou acesse nossos materiais exclusivos."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABA 2: LINKS E BOTÕES -->
+      <div class="tab-panel" id="tab-links" role="tabpanel">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2>Gerenciar Links &amp; Tagueamento GTM / RD</h2>
+              <p class="panel-subtitle pretty-text">Adicione ícone ou imagem em cada link, personalize o texto e defina as tags do GTM e integração com o RD Station.</p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-add-link">
+              + Adicionar Link
+            </button>
+          </div>
+
+          <div class="links-list" id="links-editor-container"></div>
+        </div>
+      </div>
+
+      <!-- ABA 3: DESIGN E CORES -->
+      <div class="tab-panel" id="tab-design" role="tabpanel">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2>Temas Prontos &amp; Estilo Visual</h2>
+              <p class="panel-subtitle pretty-text">Escolha um tema base ou ajuste as cores para combinar perfeitamente com sua Landing Page no RD Station.</p>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #cbd5e1; display: block; margin-bottom: 0.5rem;">
+              Temas Rápidos
+            </label>
+            <div class="presets-row" id="theme-presets">
+              <button type="button" class="preset-btn" data-preset="rd-dark">
+                <div class="preset-swatch" style="background: #0f172a;">
+                  <div class="preset-swatch-inner" style="background: #2563eb;"></div>
+                </div>
+                <span>Dark Moderno</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="clean-light">
+                <div class="preset-swatch" style="background: #f8fafc;">
+                  <div class="preset-swatch-inner" style="background: #0f172a;"></div>
+                </div>
+                <span>Light Clean</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="emerald">
+                <div class="preset-swatch" style="background: #064e3b;">
+                  <div class="preset-swatch-inner" style="background: #10b981;"></div>
+                </div>
+                <span>Verde Comercial</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="transparent-rd">
+                <div class="preset-swatch" style="background: repeating-conic-gradient(#334155 0% 25%, #1e293b 0% 50%) 50% / 10px 10px;">
+                  <div class="preset-swatch-inner" style="background: #3b82f6;"></div>
+                </div>
+                <span>Fundo Transparente (LP RD)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-top: 0.5rem;">
+            <div class="form-group full">
+              <label class="checkbox-row checkbox-label" for="design-transparent-bg">
+                <input type="checkbox" id="design-transparent-bg" class="visually-hidden" />
+                <span>Deixar fundo do bloco transparente (usar o fundo da própria Seção do RD Station)</span>
+              </label>
+            </div>
+
+            <div class="form-group" id="group-bg-color">
+              <label for="design-bg-color">Cor de Fundo do Bloco</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="design-bg-color" value="#0f172a" />
+                <input type="text" id="design-bg-color-hex" value="#0f172a" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="design-text-color">Cor do Título e Descrição</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="design-text-color" value="#f8fafc" />
+                <input type="text" id="design-text-color-hex" value="#f8fafc" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="design-btn-bg">Cor de Fundo dos Botões</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="design-btn-bg" value="#1e293b" />
+                <input type="text" id="design-btn-bg-hex" value="#1e293b" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="design-btn-text">Cor do Texto dos Botões</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="design-btn-text" value="#ffffff" />
+                <input type="text" id="design-btn-text-hex" value="#ffffff" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="design-btn-border">Cor da Borda / Destaque</label>
+              <div class="color-input-wrapper">
+                <input type="color" id="design-btn-border" value="#3b82f6" />
+                <input type="text" id="design-btn-border-hex" value="#3b82f6" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="design-btn-radius">Formato dos Botões</label>
+              <select id="design-btn-radius">
+                <option value="14px">Arredondado Moderno (14px)</option>
+                <option value="999px">Pílula Completa (999px)</option>
+                <option value="6px">Discreto / Corporativo (6px)</option>
+                <option value="0px">Reto / Quadrado (0px)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="design-max-width">Largura Máxima do Container</label>
+              <select id="design-max-width">
+                <option value="480px">Compacto Linktree (480px)</option>
+                <option value="580px">Médio (580px)</option>
+                <option value="100%">100% da Coluna do RD Station</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="design-icon-size">Tamanho do Ícone/Imagem no Botão</label>
+              <select id="design-icon-size">
+                <option value="28px">Padrão (28px)</option>
+                <option value="38px">Médio (38px)</option>
+                <option value="48px">Miniatura Destacada (48px)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABA 4: EXPORTAÇÃO RD STATION -->
+      <div class="tab-panel" id="tab-export" role="tabpanel">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2>Opção A: Carregar em 1 Único Componente HTML no RD Station</h2>
+              <p class="panel-subtitle pretty-text">O código abaixo já inclui o identificador desta árvore (<code id="export-tree-id-badge"></code>), o disparo para o GTM (<code>dataLayer</code>) e o envio automático de cliques para a sua Planilha Google!</p>
+            </div>
+          </div>
+
+          <div class="copyable">
+            <span class="copy">
+              <button type="button" class="copy-button" command="--copy" commandfor="code-single-component" aria-label="Copiar código para componente HTML único">
+                <span class="icon-copy" aria-hidden="true">📋</span>
+                <span class="icon-check" aria-hidden="true">✓</span>
+                <span>Copiar Código Completo</span>
+              </button>
+              <span class="tip" role="status"></span>
+            </span>
+            <pre><code id="code-single-component"></code></pre>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2>Opção B: Carregar em Mais de Um Componente HTML (Modular)</h2>
+              <p class="panel-subtitle pretty-text">Para dividir a marca e os botões em vários componentes HTML separados dentro da Landing Page do RD Station.</p>
+            </div>
+          </div>
+
+          <div id="modular-codes-container" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+        </div>
+      </div>
+
+      <!-- ABA 5: DASHBOARD DE CLIQUES & INTEGRAÇÃO GOOGLE SHEETS -->
+      <div class="tab-panel" id="tab-dashboard" role="tabpanel">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2>☁️ Conexão com Google Sheets (Cliques + Salvamento de Árvores)</h2>
+              <p class="panel-subtitle pretty-text">Cole abaixo a URL do seu Web App do Google Apps Script. Ela ficará embutida automaticamente nos códigos gerados para o RD Station e alimentará este Dashboard.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group full">
+              <label for="input-sheets-url">
+                <span>URL do Web App do Google Apps Script (termina em <code>/exec</code>)</span>
+                <span class="form-hint">Dica: Você também pode fixar essa URL na constante <code>DEFAULT_SHEETS_WEBHOOK_URL</code> no topo do arquivo <code>app.js</code> no GitHub!</span>
+              </label>
+              <div class="upload-inline">
+                <input type="url" id="input-sheets-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" />
+                <button type="button" class="btn btn-primary btn-sm" id="btn-connect-sheets" style="white-space: nowrap;">
+                  🔄 Conectar &amp; Sincronizar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAINEL DE ANALYTICS E CLIQUES -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2>📊 Dashboard de Cliques (Multi-Linktree)</h2>
+              <p class="panel-subtitle pretty-text">Acompanhe os cliques registrados em todas as suas árvores publicadas no RD Station.</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-test-click-cloud" title="Envia um clique simulado da árvore atual para testar o Dashboard">
+                🧪 Simular Clique Teste
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" id="btn-refresh-dashboard">
+                ↻ Atualizar Dados
+              </button>
+            </div>
+          </div>
+
+          <!-- Filtros do Dashboard -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="dash-filter-tree">Filtrar por Linktree</label>
+              <select id="dash-filter-tree">
+                <option value="ALL">Todas as Árvores (Consolidado)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="dash-filter-days">Período</label>
+              <select id="dash-filter-days">
+                <option value="ALL">Todo o histórico</option>
+                <option value="1">Hoje (Últimas 24h)</option>
+                <option value="7">Últimos 7 dias</option>
+                <option value="30">Últimos 30 dias</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- KPIs -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <span class="kpi-label">Total de Cliques</span>
+              <span class="kpi-value" id="kpi-total-clicks">0</span>
+              <span class="kpi-sub" id="kpi-source-mode">Dados locais / demonstração</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Botão Mais Clicado</span>
+              <span class="kpi-value" id="kpi-top-btn" style="font-size: 1.05rem;">—</span>
+              <span class="kpi-sub" id="kpi-top-btn-count">0 cliques</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Árvores com Cliques</span>
+              <span class="kpi-value" id="kpi-active-trees">0</span>
+              <span class="kpi-sub">Linktrees monitorados</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Principal Origem (UTM)</span>
+              <span class="kpi-value" id="kpi-top-utm" style="font-size: 1.1rem;">—</span>
+              <span class="kpi-sub">utm_source mais frequente</span>
+            </div>
+          </div>
+
+          <!-- Gráfico de Barras dos Botões -->
+          <div>
+            <h3 style="font-size: 0.86rem; color: #cbd5e1; margin-bottom: 0.6rem;">Ranking Visual de Cliques por Botão</h3>
+            <div class="bar-chart-list" id="dashboard-bars-container"></div>
+          </div>
+
+          <!-- Tabela Responsiva (Seguindo modern-web-guidance `responsive-table`) -->
+          <div tabindex="0" role="region" aria-labelledby="clicks-table-caption" class="table-wrapper">
+            <table>
+              <caption id="clicks-table-caption">Desempenho detalhado por botão e árvore de links</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Botão / Texto</th>
+                  <th scope="col">Linktree</th>
+                  <th scope="col">ID Botão</th>
+                  <th scope="col">Principal UTM</th>
+                  <th scope="col">Último Clique</th>
+                  <th scope="col">Total Cliques</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PASSO A PASSO E SCRIPT DO GOOGLE SHEETS -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2>🛠️ Código do Google Apps Script (Para colar na sua Planilha Google)</h2>
+              <p class="panel-subtitle pretty-text">Em uma planilha nova (<code>sheets.new</code>), vá em <strong>Extensões &gt; Apps Script</strong>, cole o código abaixo e clique em <strong>Implantar &gt; Nova implantação &gt; App da Web</strong> (Acesso: <em>Qualquer pessoa</em>).</p>
+            </div>
+          </div>
+
+          <div class="copyable">
+            <span class="copy">
+              <button type="button" class="copy-button" command="--copy" commandfor="code-apps-script" aria-label="Copiar código do Google Apps Script">
+                <span class="icon-copy" aria-hidden="true">📋</span>
+                <span class="icon-check" aria-hidden="true">✓</span>
+                <span>Copiar Script da Planilha</span>
+              </button>
+              <span class="tip" role="status"></span>
+            </span>
+            <pre><code id="code-apps-script">Carregando código do Google Apps Script...</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coluna Direita: Preview Ao Vivo e Simulador GTM -->
+    <aside class="preview-column" aria-label="Pré-visualização em tempo real">
+      <div class="preview-frame-wrapper">
+        <div class="preview-toolbar">
+          <span style="font-size: 0.85rem; font-weight: 700;">📱 Preview Ao Vivo (Simulador RD)</span>
+          <div class="device-toggle" role="group" aria-label="Alternar tamanho da tela">
+            <button type="button" class="active" data-device="mobile">Mobile (390px)</button>
+            <button type="button" class="
+" data-device="desktop">Coluna Larga</button>
+          </div>
+        </div>
+
+        <div class="rd-canvas-simulator mobile-view" id="rd-simulator">
+          <div id="live-preview-mount"></div>
+        </div>
+      </div>
+
+      <!-- Simulador de Eventos do GTM / RD / Planilha -->
+      <div class="datalayer-console">
+        <div class="console-header">
+          <span>📡 Testador Ao Vivo (GTM + Google Sheets)</span>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-clear-console" style="padding: 0.15rem 0.5rem; font-size: 0.7rem;">
+            Limpar
+          </button>
+        </div>
+        <div class="console-logs" id="datalayer-log-list">
+          <div class="console-entry">Clique em qualquer botão do Preview acima para testar o disparo no <code>dataLayer</code> e no Dashboard!</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

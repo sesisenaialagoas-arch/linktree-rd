@@ -1,0 +1,16 @@
+{
+  "trees": [
+    {
+      "id": "institucional-principal",
+      "name": "Canais Oficiais (Institucional)",
+      "file": "trees/institucional-principal.json",
+      "updatedAt": "2026-11-12"
+    },
+    {
+      "id": "campanha-comercial",
+      "name": "Campanha Comercial & WhatsApp",
+      "file": "trees/campanha-comercial.json",
+      "updatedAt": "2026-11-12"
+    }
+  ]
+}
