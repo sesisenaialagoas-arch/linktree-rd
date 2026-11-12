@@ -1,20 +1,23 @@
 /**
  * ============================================================================
- * RD LINKTREE STUDIO — BACKEND AUTOMÁTICO NO GOOGLE SHEETS (APPS SCRIPT)
+ * RD LINKTREE STUDIO — BACKEND SEGURO NO GOOGLE SHEETS (APPS SCRIPT)
  * ============================================================================
- * COMO ATIVAR EM 1 MINUTO:
- * 1. Crie uma Planilha Google em branco (https://sheets.new).
+ * COMO ATIVAR PASSO A PASSO:
+ * 1. Abra https://sheets.new para criar uma Planilha Google em branco.
  * 2. No menu superior, clique em "Extensões" > "Apps Script".
- * 3. Apague qualquer código que estiver lá e cole TODO este arquivo.
- * 4. Clique no botão azul "Implantar" (canto superior direito) > "Nova implantação".
- * 5. Em "Selecionar tipo" (ícone de engrenagem), escolha "App da Web".
- * 6. Configure:
- *    - Executar como: "Eu" (seu e-mail)
- *    - Quem pode acessar: "Qualquer pessoa" (Importante para receber cliques das LPs do RD!)
- * 7. Clique em "Implantar", autorize o acesso e copie a "URL do app da Web" (termina com /exec).
- * 8. Cole essa URL na aba "5. Dashboard & Nuvem" do seu RD Linktree Studio!
+ * 3. Apague o código padrão, cole TODO este arquivo e defina abaixo a sua
+ *    SENHA BASE na variável APP_MASTER_PASSWORD (linha 22).
+ * 4. Clique em "Implantar" (botão azul no topo direito) > "Nova implantação".
+ * 5. Clique na engrenagem ao lado de "Selecionar tipo" e escolha "App da Web".
+ * 6. Preencha:
+ *    - Executar como: "Eu" (sua conta Google)
+ *    - Quem pode acessar: "Qualquer pessoa"
+ * 7. Clique em "Implantar", autorize o acesso e copie a "URL do app da Web" (/exec).
  * ============================================================================
  */
+
+// 🔐 DEFINA AQUI A SUA SENHA BASE DO APP (Mesma senha usada para entrar no painel):
+var APP_MASTER_PASSWORD = 'senai2026';
 
 var SHEET_CLICKS = 'Cliques';
 var SHEET_TREES = 'Trees';
@@ -60,14 +63,29 @@ function jsonResponse(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+function isAuthorized(providedKey) {
+  if (!APP_MASTER_PASSWORD) return true;
+  return String(providedKey || '') === String(APP_MASTER_PASSWORD);
+}
+
+/**
+ * Leitura do Dashboard e das Árvores Salvas (PROTEGIDO POR SENHA BASE)
+ */
 function doGet(e) {
   try {
+    var providedKey = (e && e.parameter && e.parameter.key) ? e.parameter.key : '';
+    if (!isAuthorized(providedKey)) {
+      return jsonResponse({
+        ok: false,
+        authError: true,
+        error: 'Acesso negado: Senha Base do App incorreta ou ausente.'
+      });
+    }
+
     var sheets = ensureSheets();
     var action = (e && e.parameter && e.parameter.action) ? e.parameter.action : 'all';
-
     var result = { ok: true, trees: [], clicks: [] };
 
-    // Lê árvores salvas na aba Trees
     if (action === 'all' || action === 'trees') {
       var treeRows = sheets.treesSheet.getDataRange().getValues();
       for (var i = 1; i < treeRows.length; i++) {
@@ -84,10 +102,8 @@ function doGet(e) {
       }
     }
 
-    // Lê histórico de cliques na aba Cliques
     if (action === 'all' || action === 'dashboard') {
       var clickRows = sheets.clicksSheet.getDataRange().getValues();
-      // Retorna até os últimos 5000 cliques para manter a resposta rápida
       var startIdx = Math.max(1, clickRows.length - 5000);
       for (var j = startIdx; j < clickRows.length; j++) {
         var c = clickRows[j];
@@ -115,6 +131,10 @@ function doGet(e) {
   }
 }
 
+/**
+ * Gravação de Cliques (Público para as LPs do RD Station)
+ * e Salvamento de Árvores (PROTEGIDO POR SENHA BASE)
+ */
 function doPost(e) {
   try {
     var sheets = ensureSheets();
@@ -122,6 +142,7 @@ function doPost(e) {
     var body = JSON.parse(raw);
     var action = body.action || 'click';
 
+    // 1. Registro de clique vindo da Landing Page do RD Station (não expõe senha na LP!)
     if (action === 'click') {
       sheets.clicksSheet.appendRow([
         new Date(),
@@ -140,7 +161,16 @@ function doPost(e) {
       return jsonResponse({ ok: true, saved: 'click' });
     }
 
+    // 2. Salvamento / Edição de Árvores de Links (EXIGE A SENHA BASE DO APP!)
     if (action === 'save_tree') {
+      if (!isAuthorized(body.app_key)) {
+        return jsonResponse({
+          ok: false,
+          authError: true,
+          error: 'Senha Base do App incorreta. Não autorizado a salvar alterações.'
+        });
+      }
+
       var treeId = String(body.tree_id || '').trim();
       var treeName = String(body.tree_name || treeId).trim();
       var treeData = body.tree_data || {};

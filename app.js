@@ -65,6 +65,8 @@ const STORAGE_KEY_TREES = 'rd_linktree_all_trees_v2';
 const STORAGE_KEY_ACTIVE = 'rd_linktree_active_id_v2';
 const STORAGE_KEY_SHEETS = 'rd_linktree_sheets_url_v2';
 const STORAGE_KEY_LOCAL_CLICKS = 'rd_linktree_local_clicks_v2';
+const SESSION_KEY_AUTH = 'rd_linktree_session_key_v2';
+const DEFAULT_LOCAL_PASS = 'senai2026';
 
 // Modelos iniciais embutidos (também presentes na pasta /trees/ do repositório)
 const BUILTIN_TREES = {
@@ -207,6 +209,7 @@ if (!treesMap[activeTreeId]) activeTreeId = Object.keys(treesMap)[0];
 let state = treesMap[activeTreeId];
 
 let sheetsWebhookUrl = localStorage.getItem(STORAGE_KEY_SHEETS) || DEFAULT_SHEETS_WEBHOOK_URL;
+let sessionAppKey = sessionStorage.getItem(SESSION_KEY_AUTH) || '';
 let cloudClicksCache = [];
 
 function loadLocalTreesMap() {
@@ -373,8 +376,21 @@ async function syncWithGoogleSheets(showFeedback = false) {
 
   try {
     const sep = sheetsWebhookUrl.includes('?') ? '&' : '?';
-    const res = await fetch(`${sheetsWebhookUrl}${sep}action=all&t=${Date.now()}`);
+    const keyParam = encodeURIComponent(sessionAppKey || '');
+    const res = await fetch(`${sheetsWebhookUrl}${sep}action=all&key=${keyParam}&t=${Date.now()}`);
     const data = await res.json();
+
+    if (data && data.authError) {
+      badge.className = 'cloud-badge disconnected';
+      badge.textContent = '🔒 Senha incorreta na Planilha';
+      if (showFeedback) {
+        alert('A Senha Base digitada não confere com a variável APP_MASTER_PASSWORD configurada no seu Google Apps Script.');
+      }
+      sessionStorage.removeItem(SESSION_KEY_AUTH);
+      sessionAppKey = '';
+      document.getElementById('auth-lock-overlay').hidden = false;
+      return;
+    }
 
     if (data && data.ok) {
       // Mescla árvores vindas da aba Trees da Planilha Google
@@ -437,6 +453,7 @@ async function saveCurrentTreeToSheets() {
   try {
     const payload = {
       action: 'save_tree',
+      app_key: sessionAppKey,
       tree_id: state.treeId,
       tree_name: state.treeName,
       tree_data: state
@@ -449,6 +466,12 @@ async function saveCurrentTreeToSheets() {
     });
 
     const data = await res.json();
+    if (data && data.authError) {
+      btn.textContent = originalText;
+      alert('Acesso negado pela Planilha: Senha Base do App incorreta!');
+      document.getElementById('auth-lock-overlay').hidden = false;
+      return;
+    }
     if (data && data.ok) {
       btn.textContent = '✓ Salvo na Planilha!';
       setTimeout(() => {
@@ -1799,6 +1822,65 @@ function initEvents() {
       }
     };
     reader.readAsText(file);
+  });
+
+  // Eventos de Autenticação (Tela de Bloqueio / Senha Base)
+  const lockOverlay = document.getElementById('auth-lock-overlay');
+  const passInput = document.getElementById('current-password');
+  const togglePassBtn = document.getElementById('btn-toggle-pass');
+  const errorBox = document.getElementById('auth-error-box');
+
+  if (sessionAppKey) {
+    lockOverlay.hidden = true;
+  }
+
+  togglePassBtn.addEventListener('click', () => {
+    const isPassword = passInput.type === 'password';
+    passInput.type = isPassword ? 'text' : 'password';
+    togglePassBtn.textContent = isPassword ? '🙈 Ocultar' : '👁️ Mostrar';
+    togglePassBtn.setAttribute('aria-label', isPassword ? 'Ocultar senha' : 'Mostrar senha');
+  });
+
+  document.getElementById('auth-signin-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const typed = passInput.value.trim();
+    if (!typed) return;
+
+    errorBox.classList.remove('visible');
+
+    // Se já houver URL da planilha configurada, valida a senha direto no servidor do Google Sheets
+    if (sheetsWebhookUrl) {
+      try {
+        const sep = sheetsWebhookUrl.includes('?') ? '&' : '?';
+        const res = await fetch(`${sheetsWebhookUrl}${sep}action=all&key=${encodeURIComponent(typed)}&t=${Date.now()}`);
+        const data = await res.json();
+        if (data && data.authError) {
+          errorBox.textContent = 'Senha Base recusada pela Planilha Google.';
+          errorBox.classList.add('visible');
+          return;
+        }
+      } catch {}
+    } else if (typed !== DEFAULT_LOCAL_PASS) {
+      errorBox.textContent = 'Senha incorreta. Para o primeiro acesso sem planilha conectada, use: senai2026';
+      errorBox.classList.add('visible');
+      return;
+    }
+
+    sessionAppKey = typed;
+    sessionStorage.setItem(SESSION_KEY_AUTH, typed);
+    lockOverlay.hidden = true;
+    passInput.value = '';
+
+    if (sheetsWebhookUrl) {
+      syncWithGoogleSheets(false);
+    }
+  });
+
+  document.getElementById('btn-lock-app').addEventListener('click', () => {
+    sessionAppKey = '';
+    sessionStorage.removeItem(SESSION_KEY_AUTH);
+    lockOverlay.hidden = false;
+    passInput.focus();
   });
 }
 

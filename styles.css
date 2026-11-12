@@ -1134,3 +1134,66 @@ input[type="color"] {
   white-space: nowrap;
   cursor: pointer;
 }
+
+/* Auth Lock Screen Overlay (per autofill-sign-in-form guidance) */
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at top, #1e293b 0%, #090d16 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 8vh 1rem 2rem;
+  overflow-y: auto;
+}
+
+.auth-overlay[hidden] {
+  display: none !important;
+}
+
+.auth-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2rem 1.75rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.auth-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+}
+
+.password-field-wrap {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.password-field-wrap input {
+  flex: 1;
+}
+
+.auth-error-msg {
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  padding: 0.6rem 0.8rem;
+  border-radius: 7px;
+  font-size: 0.8rem;
+  display: none;
+}
+
+.auth-error-msg.visible {
+  display: block;
+}
+

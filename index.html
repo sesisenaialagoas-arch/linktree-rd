@@ -7,6 +7,48 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- Tela de Bloqueio / Login Seguro (Seguindo autofill-sign-in-form) -->
+  <div class="auth-overlay" id="auth-lock-overlay">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <div class="brand-badge" style="width: 48px; height: 48px; font-size: 1.3rem;" aria-hidden="true">🔒</div>
+        <h2 class="balanced-heading" style="font-size: 1.25rem;">Acesso Restrito — RD Linktree Studio</h2>
+        <p class="panel-subtitle pretty-text">Digite a <strong>Senha Base do App</strong> para gerenciar os Linktrees e acessar o Dashboard da Planilha Google.</p>
+      </div>
+
+      <form id="auth-signin-form">
+        <input type="text" id="username" name="username" value="admin@sesisenai" autocomplete="username" spellcheck="false" hidden />
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="current-password">Senha Base do App</label>
+          <div class="password-field-wrap">
+            <input
+              type="password"
+              id="current-password"
+              name="password"
+              autocomplete="current-password"
+              enterkeyhint="done"
+              placeholder="Digite a senha base..."
+              required
+            />
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-toggle-pass" aria-label="Mostrar senha">
+              👁️ Mostrar
+            </button>
+          </div>
+          <span class="form-hint">Senha padrão inicial: <code>senai2026</code> (você pode alterar no script da Planilha).</span>
+        </div>
+
+        <div class="auth-error-msg" id="auth-error-box" role="alert">
+          Senha incorreta. Verifique a Senha Base configurada.
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.7rem; margin-top: 0.4rem;">
+          Entrar no Painel
+        </button>
+      </form>
+    </div>
+  </div>
+
   <header class="app-header">
     <div class="brand-logo">
       <div class="brand-badge" aria-hidden="true">RD</div>
@@ -29,6 +71,9 @@
       </label>
       <button type="button" class="btn btn-primary btn-sm" id="btn-go-code">
         ⚡ Pegar Código RD
+      </button>
+      <button type="button" class="btn btn-danger btn-sm" id="btn-lock-app" title="Bloquear painel e encerrar sessão">
+        🔒 Sair
       </button>
     </div>
   </header>
@@ -341,7 +386,7 @@
             <div class="form-group full">
               <label for="input-sheets-url">
                 <span>URL do Web App do Google Apps Script (termina em <code>/exec</code>)</span>
-                <span class="form-hint">Dica: Você também pode fixar essa URL na constante <code>DEFAULT_SHEETS_WEBHOOK_URL</code> no topo do arquivo <code>app.js</code> no GitHub!</span>
+                <span class="form-hint">Protegido por <code>APP_MASTER_PASSWORD</code> no servidor da Planilha.</span>
               </label>
               <div class="upload-inline">
                 <input type="url" id="input-sheets-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" />
@@ -349,6 +394,9 @@
                   🔄 Conectar &amp; Sincronizar
                 </button>
               </div>
+              <span class="form-hint">
+                🔒 <strong>Como a segurança funciona:</strong> O código gerado para o RD Station contém apenas a permissão pública de registrar cliques (<code>action: "click"</code>). Já a leitura do Dashboard e o salvamento de árvores exigem a sua <strong>Senha Base do App</strong> validada direto dentro do Google Apps Script!
+              </span>
             </div>
           </div>
         </div>
