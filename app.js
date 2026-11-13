@@ -5,7 +5,7 @@
  * sem precisar colar a URL no navegador, basta colar a URL do seu Web App aqui:
  * ============================================================================
  */
-const DEFAULT_SHEETS_WEBHOOK_URL = '';
+const DEFAULT_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzPBtOLmcRe5kdpEUMDaaMe555re_XWxGDFPBRYELIVH1o4dPPdk0A1UC-UIXCAebKayQ/exec';
 
 // Biblioteca de Ícones SVG Prontos
 const SVG_ICONS = {
