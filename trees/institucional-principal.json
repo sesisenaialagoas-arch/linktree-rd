@@ -14,6 +14,7 @@
   "design": {
     "transparentBg": false,
     "bgColor": "#0f172a",
+    "bgOpacity": 5,
     "textColor": "#f8fafc",
     "btnBg": "#1e293b",
     "btnText": "#ffffff",

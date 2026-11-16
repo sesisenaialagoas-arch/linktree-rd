@@ -58,6 +58,78 @@ const SVG_ICONS = {
   star: {
     label: '⭐ Destaque / VIP',
     svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`
+  },
+  rocket: {
+    label: '🚀 Foguete / Lançamento / Impulso',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>`
+  },
+  megaphone: {
+    label: '📢 Megafone / Campanha / Novidade',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg>`
+  },
+  target: {
+    label: '🎯 Alvo / Meta / Estratégia',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>`
+  },
+  fire: {
+    label: '🔥 Em Alta / Oferta Imperdível',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>`
+  },
+  bolt: {
+    label: '⚡ Raio / Acesso Rápido / Automação',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`
+  },
+  bulb: {
+    label: '💡 Lâmpada / Ideia / Inovação',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>`
+  },
+  graduation: {
+    label: '🎓 Cursos / Educação / Formação',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>`
+  },
+  trophy: {
+    label: '🏆 Troféu / Prêmio / Resultados',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>`
+  },
+  chart: {
+    label: '📊 Gráfico / Crescimento / Dados',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`
+  },
+  ticket: {
+    label: '🎟️ Ingresso / Inscrição / Cupom',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>`
+  },
+  gift: {
+    label: '🎁 Presente / Bônus / Material Grátis',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>`
+  },
+  users: {
+    label: '🤝 Parceria / Consultoria / Equipe',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`
+  },
+  file_text: {
+    label: '📄 Edital / Matrícula / Formulário',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`
+  },
+  headset: {
+    label: '🎧 Suporte / Atendimento / Ouvidoria',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>`
+  },
+  shield: {
+    label: '🛡️ Garantia / Segurança / Certificação',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`
+  },
+  mic: {
+    label: '🎙️ Podcast / Webinar / Aula Ao Vivo',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>`
+  },
+  tiktok: {
+    label: '🎵 TikTok',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>`
+  },
+  facebook: {
+    label: '👍 Facebook',
+    svg: `<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>`
   }
 };
 
@@ -87,6 +159,7 @@ const BUILTIN_TREES = {
     design: {
       transparentBg: false,
       bgColor: '#0f172a',
+      bgOpacity: 5,
       textColor: '#f8fafc',
       btnBg: '#1e293b',
       btnText: '#ffffff',
@@ -160,6 +233,7 @@ const BUILTIN_TREES = {
     design: {
       transparentBg: false,
       bgColor: '#064e3b',
+      bgOpacity: 5,
       textColor: '#ecfdf5',
       btnBg: '#047857',
       btnText: '#ffffff',
@@ -491,12 +565,25 @@ async function saveCurrentTreeToSheets() {
    GERADOR DE CÓDIGO HTML/CSS/JS PARA O RD STATION (COM GTM + GOOGLE SHEETS)
    ========================================================================= */
 
+function hexToRgba(hex, opacityPercent) {
+  const clean = String(hex || '#0f172a').replace('#', '');
+  const r = parseInt(clean.substring(0, 2), 16) || 15;
+  const g = parseInt(clean.substring(2, 4), 16) || 23;
+  const b = parseInt(clean.substring(4, 6), 16) || 42;
+  const alpha = Math.max(0, Math.min(100, Number(opacityPercent ?? 5))) / 100;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 function generateStylesBlock() {
   const d = state.design;
   const b = state.brand;
-  const bgRule = d.transparentBg ? 'transparent' : d.bgColor;
+  const opacityVal = d.bgOpacity !== undefined ? Number(d.bgOpacity) : 5;
+  const isFullTransparent = d.transparentBg || opacityVal === 0;
+  const bgRule = isFullTransparent ? 'transparent' : hexToRgba(d.bgColor, opacityVal);
   const paddingRule = d.transparentBg ? '12px 4px' : '28px 20px';
-  const boxShadowRule = d.transparentBg ? 'none' : '0 12px 32px rgba(0, 0, 0, 0.22)';
+  const boxShadowRule = isFullTransparent ? 'none' : '0 12px 32px rgba(0, 0, 0, 0.18)';
+  const borderRule = isFullTransparent ? 'none' : '1px solid rgba(255, 255, 255, 0.08)';
+  const backdropRule = !isFullTransparent && opacityVal < 95 ? 'backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);' : '';
 
   return `<style>
   /* RD Linktree Studio (${escapeHtml(state.treeId)}) */
@@ -509,6 +596,8 @@ function generateStylesBlock() {
     max-width: ${d.maxWidth};
     margin: 0 auto;
     background: ${bgRule};
+    ${backdropRule}
+    border: ${borderRule};
     color: ${d.textColor};
     padding: ${paddingRule};
     border-radius: 20px;
@@ -992,6 +1081,18 @@ function syncFormInputsFromState() {
 
   document.getElementById('design-transparent-bg').checked = state.design.transparentBg;
   document.getElementById('group-bg-color').style.opacity = state.design.transparentBg ? '0.45' : '1';
+  document.getElementById('group-bg-opacity').style.opacity = state.design.transparentBg ? '0.45' : '1';
+
+  const bgOp = state.design.bgOpacity !== undefined ? Number(state.design.bgOpacity) : 5;
+  const opRange = document.getElementById('design-bg-opacity');
+  const opNum = document.getElementById('design-bg-opacity-num');
+  if (opRange && opNum) {
+    opRange.value = bgOp;
+    opRange.style.setProperty('--progress', `${bgOp}%`);
+    opNum.value = bgOp;
+    document.getElementById('label-bg-opacity').textContent = `${bgOp}%`;
+  }
+
   document.getElementById('design-bg-color').value = state.design.bgColor;
   document.getElementById('design-bg-color-hex').value = state.design.bgColor;
   document.getElementById('design-text-color').value = state.design.textColor;
@@ -1663,8 +1764,25 @@ function initEvents() {
   document.getElementById('design-transparent-bg').addEventListener('change', (e) => {
     state.design.transparentBg = e.target.checked;
     document.getElementById('group-bg-color').style.opacity = e.target.checked ? '0.45' : '1';
+    document.getElementById('group-bg-opacity').style.opacity = e.target.checked ? '0.45' : '1';
     updatePreviewAndExport();
   });
+
+  const opRangeInput = document.getElementById('design-bg-opacity');
+  const opNumInput = document.getElementById('design-bg-opacity-num');
+
+  function updateBgOpacity(rawVal) {
+    const clamped = Math.max(0, Math.min(100, Number(rawVal) || 0));
+    state.design.bgOpacity = clamped;
+    opRangeInput.value = clamped;
+    opRangeInput.style.setProperty('--progress', `${clamped}%`);
+    opNumInput.value = clamped;
+    document.getElementById('label-bg-opacity').textContent = `${clamped}%`;
+    updatePreviewAndExport();
+  }
+
+  opRangeInput.addEventListener('input', (e) => updateBgOpacity(e.target.value));
+  opNumInput.addEventListener('input', (e) => updateBgOpacity(e.target.value));
 
   ['btnRadius', 'maxWidth', 'iconSize'].forEach((prop) => {
     const idMap = {

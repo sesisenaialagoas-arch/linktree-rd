@@ -262,16 +262,28 @@
             <div class="form-group full">
               <label class="checkbox-row checkbox-label" for="design-transparent-bg">
                 <input type="checkbox" id="design-transparent-bg" class="visually-hidden" />
-                <span>Deixar fundo do bloco transparente (usar o fundo da própria Seção do RD Station)</span>
+                <span>Deixar fundo 100% invisível (sem borda/sombra, usar apenas o fundo da Seção do RD)</span>
               </label>
             </div>
 
             <div class="form-group" id="group-bg-color">
-              <label for="design-bg-color">Cor de Fundo do Bloco</label>
+              <label for="design-bg-color">Cor de Fundo da Coluna</label>
               <div class="color-input-wrapper">
                 <input type="color" id="design-bg-color" value="#0f172a" />
                 <input type="text" id="design-bg-color-hex" value="#0f172a" />
               </div>
+            </div>
+
+            <div class="form-group" id="group-bg-opacity">
+              <label for="design-bg-opacity">
+                <span>Opacidade do Fundo da Coluna</span>
+                <span id="label-bg-opacity">5%</span>
+              </label>
+              <div class="color-input-wrapper">
+                <input type="range" id="design-bg-opacity" min="0" max="100" step="1" value="5" style="flex: 1;" />
+                <input type="number" id="design-bg-opacity-num" min="0" max="100" step="1" value="5" style="width: 68px; text-align: center;" aria-label="Porcentagem de opacidade do fundo" />
+              </div>
+              <span class="form-hint">Ex.: <code>5%</code> cria uma leve camada translúcida sobre o fundo da LP.</span>
             </div>
 
             <div class="form-group">
