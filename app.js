@@ -6,6 +6,8 @@
  * ============================================================================
  */
 const DEFAULT_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzPBtOLmcRe5kdpEUMDaaMe555re_XWxGDFPBRYELIVH1o4dPPdk0A1UC-UIXCAebKayQ/exec';
+const CLOUDINARY_CLOUD_NAME = 'ectonvjw';
+const CLOUDINARY_UPLOAD_PRESET = 'linktree-sesisenai';
 
 // Biblioteca de Ícones SVG Prontos
 const SVG_ICONS = {
@@ -1558,44 +1560,62 @@ function initEvents() {
     });
   });
 
+  async function uploadToCloudinary(file, labelEl) {
+    const textNode = labelEl ? [...labelEl.childNodes].find((n) => n.nodeType === Node.TEXT_NODE) : null;
+    const originalLabel = textNode ? textNode.nodeValue : '';
+    if (textNode) textNode.nodeValue = ' ⏳ Subindo... ';
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok || !data.secure_url) {
+        throw new Error(data.error?.message || 'Erro no upload Cloudinary');
+      }
+
+      const optimizedUrl = data.secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/');
+      if (textNode) {
+        textNode.nodeValue = ' ✓ Enviado! ';
+        setTimeout(() => {
+          textNode.nodeValue = originalLabel;
+        }, 2000);
+      }
+      return optimizedUrl;
+    } catch (err) {
+      if (textNode) textNode.nodeValue = originalLabel;
+      alert('Falha ao enviar imagem para o Cloudinary: ' + err.message);
+      return null;
+    }
+  }
+
   function handleImageUpload(fileInput, callback) {
-    fileInput.addEventListener('change', (e) => {
+    fileInput.addEventListener('change', async (e) => {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const img = new Image();
-        img.onload = () => {
-          const maxDim = 600;
-          let { width, height } = img;
-          if (width > maxDim || height > maxDim) {
-            const ratio = Math.min(maxDim / width, maxDim / height);
-            width = Math.round(width * ratio);
-            height = Math.round(height * ratio);
-          }
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          const dataUrl = canvas.toDataURL('image/webp', 0.85);
-          callback(dataUrl);
-        };
-        img.src = ev.target.result;
-      };
-      reader.readAsDataURL(file);
+      const labelEl = fileInput.closest('label');
+      const uploadedUrl = await uploadToCloudinary(file, labelEl);
+      fileInput.value = '';
+      if (uploadedUrl) {
+        callback(uploadedUrl);
+      }
     });
   }
 
-  handleImageUpload(document.getElementById('upload-logo-file'), (dataUrl) => {
-    state.brand.logoUrl = dataUrl;
-    document.getElementById('brand-logo-url').value = dataUrl;
+  handleImageUpload(document.getElementById('upload-logo-file'), (cloudUrl) => {
+    state.brand.logoUrl = cloudUrl;
+    document.getElementById('brand-logo-url').value = cloudUrl;
     updatePreviewAndExport();
   });
 
-  handleImageUpload(document.getElementById('upload-banner-file'), (dataUrl) => {
-    state.brand.bannerUrl = dataUrl;
-    document.getElementById('brand-banner-url').value = dataUrl;
+  handleImageUpload(document.getElementById('upload-banner-file'), (cloudUrl) => {
+    state.brand.bannerUrl = cloudUrl;
+    document.getElementById('brand-banner-url').value = cloudUrl;
     updatePreviewAndExport();
   });
 
@@ -1656,18 +1676,19 @@ function initEvents() {
     updatePreviewAndExport();
   });
 
-  linksContainer.addEventListener('change', (e) => {
+  linksContainer.addEventListener('change', async (e) => {
     if (e.target.dataset.uploadLinkImg !== undefined) {
       const idx = Number(e.target.dataset.uploadLinkImg);
       const file = e.target.files && e.target.files[0];
       if (!file || !state.links[idx]) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        state.links[idx].customImageUrl = ev.target.result;
+      const labelEl = e.target.closest('label');
+      const uploadedUrl = await uploadToCloudinary(file, labelEl);
+      e.target.value = '';
+      if (uploadedUrl) {
+        state.links[idx].customImageUrl = uploadedUrl;
         renderLinksEditor();
         updatePreviewAndExport();
-      };
-      reader.readAsDataURL(file);
+      }
     }
   });
 
