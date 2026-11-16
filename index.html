@@ -6,24 +6,24 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>RD Linktree Studio — Plataforma Multi-Linktree + Dashboard Google Sheets</title>
-  <link rel="stylesheet" href="styles.css?v=20261116-4" />
+  <title>RD Linktree Studio — SESI SENAI</title>
+  <link rel="stylesheet" href="styles.css?v=20261116-5" />
 </head>
 <body>
   <!-- Tela de Bloqueio / Login Seguro (Seguindo autofill-sign-in-form) -->
   <div class="auth-overlay" id="auth-lock-overlay">
     <div class="auth-card">
       <div class="auth-card-header">
-        <div class="brand-badge" style="width: 48px; height: 48px; font-size: 1.3rem;" aria-hidden="true">🔒</div>
-        <h2 class="balanced-heading" style="font-size: 1.25rem;">Acesso Restrito — RD Linktree Studio</h2>
-        <p class="panel-subtitle pretty-text">Digite a <strong>Senha Base do App</strong> para gerenciar os Linktrees e acessar o Dashboard da Planilha Google.</p>
+        <img src="logo-sesi-senai.png" alt="SESI SENAI" class="auth-logo-img" />
+        <h2 class="balanced-heading" style="font-size: 1.3rem;">RD Linktree Studio</h2>
+        <p class="panel-subtitle pretty-text">Digite sua credencial de acesso para gerenciar as árvores de links e visualizar o Dashboard.</p>
       </div>
 
       <form id="auth-signin-form">
         <input type="text" id="username" name="username" value="admin@sesisenai" autocomplete="username" spellcheck="false" hidden />
 
-        <div class="form-group" style="margin-bottom: 1rem;">
-          <label for="current-password">Senha Base do App</label>
+        <div class="form-group" style="margin-bottom: 1.15rem;">
+          <label for="current-password" style="font-size: 0.86rem; margin-bottom: 0.2rem;">Senha de Acesso</label>
           <div class="password-field-wrap">
             <input
               type="password"
@@ -31,21 +31,20 @@
               name="password"
               autocomplete="current-password"
               enterkeyhint="done"
-              placeholder="Digite a senha base..."
+              placeholder="Digite sua senha de acesso..."
               required
             />
-            <button type="button" class="btn btn-secondary btn-sm" id="btn-toggle-pass" aria-label="Mostrar senha">
+            <button type="button" class="btn btn-secondary" id="btn-toggle-pass" aria-label="Mostrar senha">
               👁️ Mostrar
             </button>
           </div>
-          <span class="form-hint">Senha padrão inicial: <code>senai2026</code> (você pode alterar no script da Planilha).</span>
         </div>
 
         <div class="auth-error-msg" id="auth-error-box" role="alert">
-          Senha incorreta. Verifique a Senha Base configurada.
+          Senha incorreta. Acesso não autorizado.
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.7rem; margin-top: 0.4rem;">
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 0.96rem; margin-top: 0.35rem;">
           Entrar no Painel
         </button>
       </form>
@@ -54,10 +53,10 @@
 
   <header class="app-header">
     <div class="brand-logo">
-      <div class="brand-badge" aria-hidden="true">RD</div>
+      <img src="logo-sesi-senai.png" alt="SESI SENAI" class="header-logo-img" />
       <div>
         <h1 class="balanced-heading">RD Linktree Studio</h1>
-        <span>Plataforma Multi-Linktree para RD Station + GTM + Dashboard Google Sheets</span>
+        <span>Plataforma Multi-Linktree para RD Station + GTM + Dashboard</span>
       </div>
     </div>
 
@@ -558,6 +557,6 @@
     </aside>
   </main>
 
-  <script src="app.js?v=20261116-4"></script>
+  <script src="app.js?v=20261116-5"></script>
 </body>
 </html>

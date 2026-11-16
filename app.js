@@ -140,7 +140,6 @@ const STORAGE_KEY_ACTIVE = 'rd_linktree_active_id_v2';
 const STORAGE_KEY_SHEETS = 'rd_linktree_sheets_url_v2';
 const STORAGE_KEY_LOCAL_CLICKS = 'rd_linktree_local_clicks_v2';
 const SESSION_KEY_AUTH = 'rd_linktree_session_key_v2';
-const DEFAULT_LOCAL_PASS = 'senai2026';
 
 // Modelos iniciais embutidos (também presentes na pasta /trees/ do repositório)
 const BUILTIN_TREES = {
@@ -2022,23 +2021,42 @@ function initEvents() {
     if (!typed) return;
 
     errorBox.classList.remove('visible');
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const origBtnText = submitBtn ? submitBtn.textContent : 'Entrar no Painel';
+    if (submitBtn) {
+      submitBtn.textContent = '⏳ Verificando acesso...';
+      submitBtn.disabled = true;
+    }
 
-    // Se já houver URL da planilha configurada, valida a senha direto no servidor do Google Sheets
-    if (sheetsWebhookUrl) {
+    const authEndpoint = sheetsWebhookUrl || DEFAULT_SHEETS_WEBHOOK_URL;
+    if (authEndpoint) {
       try {
-        const sep = sheetsWebhookUrl.includes('?') ? '&' : '?';
-        const res = await fetch(`${sheetsWebhookUrl}${sep}action=all&key=${encodeURIComponent(typed)}&t=${Date.now()}`);
+        const sep = authEndpoint.includes('?') ? '&' : '?';
+        const res = await fetch(`${authEndpoint}${sep}action=all&key=${encodeURIComponent(typed)}&t=${Date.now()}`);
         const data = await res.json();
-        if (data && data.authError) {
-          errorBox.textContent = 'Senha Base recusada pela Planilha Google.';
+        if (!data || data.authError || !data.ok) {
+          errorBox.textContent = 'Senha de acesso incorreta. Verifique sua credencial.';
           errorBox.classList.add('visible');
+          if (submitBtn) {
+            submitBtn.textContent = origBtnText;
+            submitBtn.disabled = false;
+          }
           return;
         }
-      } catch {}
-    } else if (typed !== DEFAULT_LOCAL_PASS) {
-      errorBox.textContent = 'Senha incorreta. Para o primeiro acesso sem planilha conectada, use: senai2026';
-      errorBox.classList.add('visible');
-      return;
+      } catch {
+        errorBox.textContent = 'Não foi possível validar a credencial com o servidor da Planilha.';
+        errorBox.classList.add('visible');
+        if (submitBtn) {
+          submitBtn.textContent = origBtnText;
+          submitBtn.disabled = false;
+        }
+        return;
+      }
+    }
+
+    if (submitBtn) {
+      submitBtn.textContent = origBtnText;
+      submitBtn.disabled = false;
     }
 
     sessionAppKey = typed;

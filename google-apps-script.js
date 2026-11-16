@@ -18,7 +18,7 @@
  */
 
 // 🔐 DEFINA AQUI A SUA SENHA BASE DO APP (Mesma senha usada para entrar no painel):
-var APP_MASTER_PASSWORD = 'senai2026';
+var APP_MASTER_PASSWORD = 'DEFINA_SUA_SENHA_AQUI';
 
 var SHEET_CLICKS = 'Cliques';
 var SHEET_TREES = 'Trees';
