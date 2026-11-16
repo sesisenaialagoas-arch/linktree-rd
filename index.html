@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>RD Linktree Studio — Plataforma Multi-Linktree + Dashboard Google Sheets</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20261116-4" />
 </head>
 <body>
   <!-- Tela de Bloqueio / Login Seguro (Seguindo autofill-sign-in-form) -->
@@ -156,7 +159,7 @@
               <div class="upload-inline">
                 <input type="url" id="brand-logo-url" placeholder="https://seudominio.com.br/logo.png" />
                 <label class="btn btn-secondary btn-sm file-upload-label">
-                  📁 Upload
+                  <span class="upload-btn-text">☁️ Upload Cloudinary</span>
                   <input type="file" id="upload-logo-file" accept="image/*" hidden />
                 </label>
               </div>
@@ -170,7 +173,7 @@
               <div class="upload-inline">
                 <input type="url" id="brand-banner-url" placeholder="https://seudominio.com.br/banner-topo.jpg" />
                 <label class="btn btn-secondary btn-sm file-upload-label">
-                  📁 Upload
+                  <span class="upload-btn-text">☁️ Upload Cloudinary</span>
                   <input type="file" id="upload-banner-file" accept="image/*" hidden />
                 </label>
               </div>
@@ -555,6 +558,6 @@
     </aside>
   </main>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=20261116-4"></script>
 </body>
 </html>

@@ -1178,11 +1178,11 @@ function renderLinksEditor() {
           </div>
 
           <div class="form-group" style="${link.iconType === 'custom_image' ? '' : 'display:none;'}" id="custom-img-group-${idx}">
-            <label>URL ou Upload da Imagem do Botão</label>
+            <label>URL ou Upload da Imagem do Botão (Cloudinary CDN)</label>
             <div class="upload-inline">
-              <input type="text" data-field="customImageUrl" data-idx="${idx}" value="${escapeHtml(link.customImageUrl)}" placeholder="https://.../icone.png" />
+              <input type="text" data-field="customImageUrl" data-idx="${idx}" value="${escapeHtml(link.customImageUrl)}" placeholder="https://res.cloudinary.com/..." />
               <label class="btn btn-secondary btn-sm file-upload-label">
-                📁 Upload
+                <span class="upload-btn-text">☁️ Upload Cloudinary</span>
                 <input type="file" data-upload-link-img="${idx}" accept="image/*" hidden />
               </label>
             </div>
@@ -1560,14 +1560,14 @@ function initEvents() {
     });
   });
 
-  async function uploadToCloudinary(file, labelEl) {
-    const textNode = labelEl ? [...labelEl.childNodes].find((n) => n.nodeType === Node.TEXT_NODE) : null;
-    const originalLabel = textNode ? textNode.nodeValue : '';
-    if (textNode) textNode.nodeValue = ' ⏳ Subindo... ';
+  async function uploadToCloudinary(fileOrDataUrl, labelEl) {
+    const spanEl = labelEl ? labelEl.querySelector('.upload-btn-text') : null;
+    const originalLabel = spanEl ? spanEl.textContent : '☁️ Upload Cloudinary';
+    if (spanEl) spanEl.textContent = '⏳ Subindo...';
 
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', fileOrDataUrl);
       formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
       const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
@@ -1580,19 +1580,54 @@ function initEvents() {
       }
 
       const optimizedUrl = data.secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/');
-      if (textNode) {
-        textNode.nodeValue = ' ✓ Enviado! ';
+      if (spanEl) {
+        spanEl.textContent = '✓ Enviado!';
         setTimeout(() => {
-          textNode.nodeValue = originalLabel;
-        }, 2000);
+          spanEl.textContent = originalLabel;
+        }, 2500);
       }
       return optimizedUrl;
     } catch (err) {
-      if (textNode) textNode.nodeValue = originalLabel;
+      if (spanEl) spanEl.textContent = originalLabel;
       alert('Falha ao enviar imagem para o Cloudinary: ' + err.message);
       return null;
     }
   }
+
+  // Converte automaticamente qualquer imagem antiga em Base64 (data:image/...) salva localmente para link do Cloudinary
+  async function autoMigrateBase64ImagesToCloudinary() {
+    let changed = false;
+    if (state.brand.logoUrl && state.brand.logoUrl.startsWith('data:image/')) {
+      const url = await uploadToCloudinary(state.brand.logoUrl, null);
+      if (url) {
+        state.brand.logoUrl = url;
+        changed = true;
+      }
+    }
+    if (state.brand.bannerUrl && state.brand.bannerUrl.startsWith('data:image/')) {
+      const url = await uploadToCloudinary(state.brand.bannerUrl, null);
+      if (url) {
+        state.brand.bannerUrl = url;
+        changed = true;
+      }
+    }
+    for (let i = 0; i < state.links.length; i++) {
+      const l = state.links[i];
+      if (l.customImageUrl && l.customImageUrl.startsWith('data:image/')) {
+        const url = await uploadToCloudinary(l.customImageUrl, null);
+        if (url) {
+          l.customImageUrl = url;
+          changed = true;
+        }
+      }
+    }
+    if (changed) {
+      syncFormInputsFromState();
+      renderLinksEditor();
+      updatePreviewAndExport();
+    }
+  }
+  autoMigrateBase64ImagesToCloudinary();
 
   function handleImageUpload(fileInput, callback) {
     fileInput.addEventListener('change', async (e) => {
@@ -1686,7 +1721,8 @@ function initEvents() {
       e.target.value = '';
       if (uploadedUrl) {
         state.links[idx].customImageUrl = uploadedUrl;
-        renderLinksEditor();
+        const urlInput = linksContainer.querySelector(`input[data-field="customImageUrl"][data-idx="${idx}"]`);
+        if (urlInput) urlInput.value = uploadedUrl;
         updatePreviewAndExport();
       }
     }
